@@ -5,12 +5,16 @@ Contributed to rdflib 3 by Thomas Kluyver, re-used here.
 import sys
 
 try:
-    from functools import wraps
+    from functools import wraps as wraps_py3
+    wraps = wraps_py3
 except ImportError:
     # No-op wraps decorator
-    def wraps(f):
-        def dec(newf): return newf
+    def wraps_py2(f):
+        def dec(newf):
+            return newf
         return dec
+    wraps = wraps_py2
+
 
 def cast_bytes(s, enc='utf-8'):
     if isinstance(s, unicode):
@@ -18,6 +22,7 @@ def cast_bytes(s, enc='utf-8'):
     return s
 
 PY3 = (sys.version_info[0] >= 3)
+
 
 def _modify_str_or_docstring(str_change_func):
     @wraps(str_change_func)
@@ -28,35 +33,35 @@ def _modify_str_or_docstring(str_change_func):
         else:
             func = func_or_str
             doc = func.__doc__
-        
+
         doc = str_change_func(doc)
-        
+
         if func:
             func.__doc__ = doc
             return func
         return doc
     return wrapper
-    
+
 if PY3:
     # Python 3:
     # ---------
-    def b(s):
+    def b_py3(s):
         return s.encode('ascii')
-    
+
     bytestype = bytes
-    
+
     # Abstract u'abc' syntax:
     @_modify_str_or_docstring
-    def format_doctest_out(s):
+    def format_doctest_out_py3(s):
         """Python 2 version
         "%(u)s'abc'" --> "'abc'"
         "%(b)s'abc'" --> "b'abc'"
         "55%(L)s"    --> "55"
-        
+
         Accepts a string or a function, so it can be used as a decorator."""
-        return s % {'u':'', 'b':'b', 'L':''}
-    
-    def type_cmp(a, b):
+        return s % {'u': '', 'b': 'b', 'L': ''}
+
+    def type_cmp_py3(a, b):
         """Python 2 style comparison based on type"""
         ta, tb = type(a).__name__, type(b).__name__
         # Ugly hack: some tests rely on tuple sorting before unicode, and I
@@ -72,27 +77,29 @@ if PY3:
             return -1
         else:
             return 0
-
+    b = b_py3
+    format_doctest_out = format_doctest_out_py3
+    type_cmp = type_cmp_py3
 else:
     # Python 2
     # --------
-    def b(s):
+    def b_py2(s):
         return s
-    
+
     bytestype = str
-    
+
     # Abstract u'abc' syntax:
     @_modify_str_or_docstring
-    def format_doctest_out(s):
+    def format_doctest_out_py2(s):
         """Python 2 version
         "%(u)s'abc'" --> "u'abc'"
         "%(b)s'abc'" --> "'abc'"
         "55%(L)s"    --> "55L"
-        
+
         Accepts a string or a function, so it can be used as a decorator."""
-        return s % {'u':'u', 'b':'', 'L':'L'}
-    
-    def type_cmp(a, b):
+        return s % {'u': 'u', 'b': '', 'L': 'L'}
+
+    def type_cmp_py2(a, b):
         # return 1 if a > b else -1 if a < b else 0
         if a > b:
             return 1
@@ -100,4 +107,6 @@ else:
             return -1
         else:
             return 0
-
+    b = b_py2
+    format_doctest_out = format_doctest_out_py2
+    type_cmp = type_cmp_py2

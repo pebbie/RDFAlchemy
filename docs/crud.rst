@@ -24,7 +24,7 @@ Reading is simply a matter of using the declared descriptors
 
 .. code-block:: python
 
-    c = Company.query.get_by(symbol = 'IBM')
+    c = Company.query.get_by(symbol='IBM')
     print(c.companyName)
     print(c.address.region)
 
@@ -52,11 +52,11 @@ The basic syntax for the :class:`~rdfalchemy.descriptors.rdfSingle` descriptors 
 
 .. code-block:: python
 
-    ibm Company.query.get_by(symbol = 'IBM')
-    sun Company.query.get_by(symbol = 'JAVA')
+    ibm Company.query.get_by(symbol='IBM')
+    sun Company.query.get_by(symbol='JAVA')
 
     ## add another descriptor on the fly
-    Company.industry = rdfSingle(ov.yindustry,'industry')
+    Company.industry = rdfSingle(ov.yindustry, 'industry')
 
     ## add an attribute (to the database)
     sun.industry = 'Computer stuff'
@@ -70,14 +70,14 @@ To delete a record, use the ``remove()`` method.  Removing an object from a grap
 
 .. code-block:: python
 
-    def remove(self, node=None, db=None, cascade = 'bnode', bnodeCheck=True):
+    def remove(self, node=None, db=None, cascade='bnode', bnodeCheck=True):
             """remove all triples where this rdfSubject is the subject of the triple
-            db -- limit the remove operation to this graph
             node -- node to remove from the graph defaults to self
-            cascade -- must be one of:
-                        * none -- remove none
-                        * bnode -- (default) remove all unreferenced bnodes
-                        * all -- remove all unreferenced bnode(s) AND uri(s)
+            db -- limit the remove operation to this graph
+            cascade -- a str, must be one of:
+                        * "none" -- remove none
+                        * "bnode" -- (default) remove all unreferenced bnodes
+                        * "all" -- remove all unreferenced bnode(s) AND uri(s)
             bnodeCheck -- boolean 
                         * True -- (default) check bnodes and raise exception if there are
                                   still references to this node

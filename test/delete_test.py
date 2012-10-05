@@ -11,21 +11,23 @@ if not log.handlers:
 #log.setLevel(10)
 
 
-Person.db=ConjunctiveGraph()
-Person.knows = rdfMultiple(FOAF.knows, range_type=FOAF.Person)        
+Person.db = ConjunctiveGraph()
+Person.knows = rdfMultiple(FOAF.knows, range_type=FOAF.Person)
 
 
 def test_start():
     assert len(Person.db) == 0
-    p=Person(last="Cooper" , first="Philip")
+    p = Person(last="Cooper", first="Philip")
     assert len(Person.db) == 3
+    del p
+
 
 def test_addBNodeKnowsL():
-    Person.knows = rdfList(FOAF.knows, range_type=FOAF.Person)        
+    Person.knows = rdfList(FOAF.knows, range_type=FOAF.Person)
     mapper()
-    p1=Person.get_by(first="Philip")
-    p2=Person(last="Cooper" , first="Ben")
-    p3=Person(last="Cooper" , first="Matt")
+    p1 = Person.get_by(first="Philip")
+    p2 = Person(last="Cooper", first="Ben")
+    p3 = Person(last="Cooper", first="Matt")
     assert len(Person.db) == 9
     p1.knows = [p2, p3]
     print len(Person.db)
@@ -33,12 +35,13 @@ def test_addBNodeKnowsL():
     del p1.knows
     print len(Person.db)
     assert len(Person.db) == 3
-    
+
+
 def test_addBNodeKnowsM():
-    Person.knows = rdfMultiple(FOAF.knows, range_type=FOAF.Person)        
-    p1=Person.get_by(first="Philip")
-    p2=Person(last="Cooper" , first="Ben")
-    p3=Person(last="Cooper" , first="Matt")
+    Person.knows = rdfMultiple(FOAF.knows, range_type=FOAF.Person)
+    p1 = Person.get_by(first="Philip")
+    p2 = Person(last="Cooper", first="Ben")
+    p3 = Person(last="Cooper", first="Matt")
     assert len(Person.db) == 9
     p1.knows = [p2, p3]
     print len(Person.db)
@@ -46,7 +49,3 @@ def test_addBNodeKnowsM():
     del p1.knows
     print len(Person.db)
     assert len(Person.db) == 3
-    
-    
-    
-

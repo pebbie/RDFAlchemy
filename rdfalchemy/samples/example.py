@@ -1,23 +1,29 @@
-from rdfalchemy import rdfSubject, rdfSingle
+from rdfalchemy import rdfSingle
+from rdfalchemy.rdfSubject import rdfSubject
 from rdflib import ConjunctiveGraph, Namespace
+import os
 
 non_core = True
 
 import logging
 log = logging.getLogger()
 log.addHandler(logging.StreamHandler())
-log.setLevel(logging.DEBUG)
+log.setLevel(logging.WARN)
 
 OV = Namespace('http://owl.openvest.org/2005/10/Portfolio#')
 VCARD = Namespace("http://www.w3.org/2006/vcard/ns#")
 
 rdfSubject.db = ConjunctiveGraph()
-rdfSubject.db.load('./data/example.n3', format='n3')
+
+rdfSubject.db.load(
+    os.path.join(os.path.split(__file__)[:-1])[0] + '/data/example.n3',
+    format='n3')
+
 
 class Company(rdfSubject):
     rdf_type = OV.Company
-    symbol = rdfSingle(OV.symbol,'symbol')
-    cik = rdfSingle(OV.secCik,'cik')
+    symbol = rdfSingle(OV.symbol, 'symbol')
+    cik = rdfSingle(OV.secCik, 'cik')
     companyName = rdfSingle(OV.companyName)
     address = rdfSingle(VCARD.adr)
 
@@ -28,53 +34,53 @@ class Company(rdfSubject):
 
 c = Company.get_by(symbol='IBM')
 ## this will enable us to see that the reads are cached
-import logging 
-log=logging.getLogger('rdfAlchemy')
+
+log = logging.getLogger('rdfAlchemy')
 ## comment out to quite debug messages
 log.setLevel(logging.DEBUG)
 
 ## list Companies
 for c in Company.ClassInstances():
-    print "%s has an SEC symbol of %s" % (c.companyName, c.cik)
-print ''
+    print("%s has an SEC symbol of %s" % (c.companyName, c.cik))
+print('')
 
-c = Company.get_by(symbol = 'IBM')
+c = Company.get_by(symbol='IBM')
 
 ## Add a descriptor on the fly
-Company.stockDescription = rdfSingle(OV.stockDescription,'stockDescription')
+Company.stockDescription = rdfSingle(OV.stockDescription, 'stockDescription')
 
-print "%s: %s"%(c.companyName,c.stockDescription)
-print " same as"
-print "%s: %s"%(c[OV.companyName],c[OV.stockDescription])
+print("%s: %s" % (c.companyName, c.stockDescription))
+print(" same as")
+print("%s: %s" % (c[OV.companyName], c[OV.stockDescription]))
 
-print "## CHECK to see if multiple reads cause database reads"
-print "   you should see no non-blank lines between here\n"
-s = "%s: %s"%(c.companyName,c.stockDescription)
-s = "%s: %s"%(c.companyName,c.stockDescription)
-print "\n   and here"
+print("## CHECK to see if multiple reads cause database reads")
+print("   you should see no non-blank lines between here\n")
+s = "%s: %s" % (c.companyName, c.stockDescription)
+s = "%s: %s" % (c.companyName, c.stockDescription)
+print("\n   and here")
 
-c = Company.get_by(symbol = 'IBM')
-print "   and exactly the same number of non-blank lines between here\n"
-s = "%s: %s"%(c.companyName,c.stockDescription)
-print "\n   and here"
+c = Company.get_by(symbol='IBM')
+print("   and exactly the same number of non-blank lines between here\n")
+s = "%s: %s" % (c.companyName, c.stockDescription)
+print("\n   and here")
 
-c = Company.get_by(symbol = 'IBM')
-print "   and  here\n"
-s = "%s: %s"%(c.companyName,c.stockDescription)
-s = "%s: %s"%(c.companyName,c.stockDescription)
-s = "%s: %s"%(c.companyName,c.stockDescription)
-print "\n   and here"
+c = Company.get_by(symbol='IBM')
+print("   and  here\n")
+s = "%s: %s" % (c.companyName, c.stockDescription)
+s = "%s: %s" % (c.companyName, c.stockDescription)
+s = "%s: %s" % (c.companyName, c.stockDescription)
+print("\n   and here")
 
 ## add another descriptor on the fly
-Company.industry = rdfSingle(OV.yindustry,'industry')
+Company.industry = rdfSingle(OV.yindustry, 'industry')
 
 ## add an attribute (from the database)
-c = Company.get_by(symbol = 'JAVA')
+c = Company.get_by(symbol='JAVA')
 c.industry = 'Computer stuff'
 
 ## delete an attribute (from the database)
-c = Company.get_by(symbol = 'IBM')
+c = Company.get_by(symbol='IBM')
 del c.industry
 
-# write out the new n3 file to see the changes 
-c.db.serialize('example-out.n3',format='n3')
+# write out the new n3 file to see the changes
+c.db.serialize('example-out.n3', format='n3')

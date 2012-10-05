@@ -1,7 +1,7 @@
 from datetime import datetime
 from rdfalchemy.sparql.sesame2 import SesameGraph
 
-import logging 
+import logging
 
 logging.getLogger('rdfalchemy.sparql').setLevel(logging.DEBUG)
 logging.getLogger('rdfalchemy.sesame2').setLevel(logging.DEBUG)
@@ -19,15 +19,15 @@ q1 = "select ?s ?p ?o where {?s ?p ?o} limit 1000"
 q2 = "select ?o where {?s ?p ?o} limit 10000"
 
 
-def mtester(method,small, all):
+def mtester(method, small, all):
     start = datetime.now()
-    i=0
-    for x in  g.query(q,resultMethod=method):
+    i = 0
+    for x in  g.query(q, resultMethod=method):
         i = i + 1
         if (i % small) == 0:
-            print "c %s %s" % (i,datetime.now()-start)
+            print("c %s %s" % (i, datetime.now() - start))
         if (i % all) == 0:
-            print "f %s %s" % (i,datetime.now()-start)
+            print("f %s %s" % (i, datetime.now() - start))
             return
 
 g = SesameGraph(url1)
@@ -37,7 +37,7 @@ q = q1
 # tester('brtr',100,1000) 
 
 print("\n  method: %s" % ('xml'))
-mtester('xml',100,1000) 
+mtester('xml', 100, 1000)
 
 # print "\n  method: %s" % ('json')
 # tester('json',100,1000) 
@@ -49,8 +49,7 @@ q = q2
 # tester('brtr',1000,5000) 
 
 print("\n  method: %s" % ('xml'))
-mtester('xml',1000,5000) 
+mtester('xml', 1000, 5000) 
 
 # print "\n  method: %s" % ('json')
 # tester('json',1000,5000) 
-

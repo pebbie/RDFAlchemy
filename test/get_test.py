@@ -11,43 +11,42 @@ if not log.handlers:
 #log.setLevel(10)
 
 
-Person.db=ConjunctiveGraph()
+Person.db = ConjunctiveGraph()
 
 
 def test_addBNodeKnowsL():
-    Person.knows = rdfList(FOAF.knowsL, range_type=FOAF.Person)        
-    p1=Person(first="PhilipL")
-    p2=Person(last="Cooper" , first="Ben")
-    p3=Person(last="Cooper" , first="Matt")
+    Person.knows = rdfList(FOAF.knowsL, range_type=FOAF.Person)
+    p1 = Person(first="PhilipL")
+    p2 = Person(last="Cooper", first="Ben")
+    p3 = Person(last="Cooper", first="Matt")
     p1.knows = [p2, p3]
-    p1=Person.get_by(first="PhilipL")
-    log.info("db len is %s"%len(Person.db))
+    p1 = Person.get_by(first="PhilipL")
+    log.info("db len is %s" % len(Person.db))
     assert len(p1.knows) == 2
     del p1
-    
-def test_addBNodeKnowsC():
-    Person.knows = rdfContainer(FOAF.knowsC, range_type=FOAF.Person)       
-    mapper() 
-    p1=Person(first="PhilipC")
-    p2=Person(last="Cooper" , first="Ben")
-    p3=Person(last="Cooper" , first="Matt")
-    p1.knows = [p2, p3]
-    p1=Person.get_by(first="PhilipC")
-    log.info("db len is %s"%len(Person.db))
-    assert len(p1.knows) == 2
-    del p1
-    
-def test_addBNodeKnowsM():
-    Person.knows = rdfMultiple(FOAF.knowsM, range_type=FOAF.Person)        
-    mapper()
-    p1=Person(first="PhilipM")
-    p2=Person(last="Cooper" , first="Ben")
-    p3=Person(last="Cooper" , first="Matt")
-    p1.knows = [p2, p3]
-    p1=Person.get_by(first="PhilipM")
-    log.info("db len is %s"%len(Person.db))
-    assert len(p1.knows) == 2
-    del p1
-    
-    
 
+
+def test_addBNodeKnowsC():
+    Person.knows = rdfContainer(FOAF.knowsC, range_type=FOAF.Person)
+    mapper()
+    p1 = Person(first="PhilipC")
+    p2 = Person(last="Cooper", first="Ben")
+    p3 = Person(last="Cooper", first="Matt")
+    p1.knows = [p2, p3]
+    p1 = Person.get_by(first="PhilipC")
+    log.info("db len is %s" % len(Person.db))
+    assert len(p1.knows) == 2
+    del p1
+
+
+def test_addBNodeKnowsM():
+    Person.knows = rdfMultiple(FOAF.knowsM, range_type=FOAF.Person)
+    mapper()
+    p1 = Person(first="PhilipM")
+    p2 = Person(last="Cooper", first="Ben")
+    p3 = Person(last="Cooper", first="Matt")
+    p1.knows = [p2, p3]
+    p1 = Person.get_by(first="PhilipM")
+    log.info("db len is %s" % len(Person.db))
+    assert len(p1.knows) == 2
+    del p1

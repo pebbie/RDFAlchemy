@@ -9,18 +9,24 @@ class RDFAbstractClassError(RDFAlchemyError):
 class SPARQLError(Exception):
     """Base SPARQL Error"""
 
+
 class ParseError(Exception):
     """Base SPARQLResult Error"""
 
+
+class UniquenessError(Exception):
+    """Base SPARQLResult Error"""
+
+
 class MalformedQueryError(SPARQLError):
     """Query Syntax Error for SPARQL RDQL etc
-    
+
     In Sesame:
        org.openrdf.query.MalformedQueryException"""
 
+
 class QueryEvaluationError(SPARQLError):
     """Query Evaluation Error reported by Server
-    
+
     In Sesame:
       org.openrdf.query.QueryEvaluationException"""
-

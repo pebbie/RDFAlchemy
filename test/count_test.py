@@ -10,42 +10,43 @@ if not log.handlers:
 #log.setLevel(10)
 
 
-Person.db=ConjunctiveGraph()
+Person.db = ConjunctiveGraph()
+
 
 def test_start():
     assert len(Person.db) == 0
-    p=Person(last="Cooper")
+    Person(last="Cooper")
     assert len(Person.db) == 2
 
 
+Person.m = rdfMultiple(FOAF.multi)
+Person.l = rdfList(FOAF.list)
+Person.c = rdfContainer(FOAF.seq)
 
-Person.m=rdfMultiple(FOAF.multi)
-Person.l=rdfList(FOAF.list)
-Person.c=rdfContainer(FOAF.seq)
 
 def test_multi():
-    p=Person.ClassInstances().next()
-    p.m = [1,2.2,0,'a','','c']
+    p = Person.ClassInstances().next()
+    p.m = [1, 2.2, 0, 'a', '', 'c']
     assert len(Person.db) == 8
-    
-    p.m = ['a','b','c']
+
+    p.m = ['a', 'b', 'c']
     assert len(Person.db) == 5
+
 
 def test_list():
     # set and reset a list
-    p=Person.ClassInstances().next()
-    p.l = [10,2.3,0,'A','','C']
+    p = Person.ClassInstances().next()
+    p.l = [10, 2.3, 0, 'A', '', 'C']
     assert len(Person.db) == 18
-    
-    p.l = [10,2.3,0]
+
+    p.l = [10, 2.3, 0]
     assert len(Person.db) == 12
 
+
 def test_seq():
-    p=Person.ClassInstances().next()
+    p = Person.ClassInstances().next()
     p.c = range(10)
     assert len(Person.db) == 24
-    
+
     p.c = ['things', 44]
     assert len(Person.db) == 16
-
-

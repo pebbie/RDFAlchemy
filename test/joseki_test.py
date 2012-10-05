@@ -6,10 +6,11 @@ g = SPARQLGraph(url)
 q1 = "select ?s ?p ?o where {?s ?p ?o} LIMIT 10"
 
 responses = {}
-x = set(list(g.query(q1,resultMethod='xml')))
-j = set(list(g.query(q1,resultMethod='json')))
+x = set(list(g.query(q1, resultMethod='xml')))
+j = set(list(g.query(q1, resultMethod='json')))
 
-print len(x)
+print(len(x))
+
 
 def sizes_test():
     assert len(x) == len(j)

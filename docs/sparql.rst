@@ -133,9 +133,9 @@ Ported methods include:
     db.load('data/rdfalchemy_doap.rdf')
     db.load('http://doapspace.org/doap/some_important.rdf')
 
-    project = db.value(None,doap.name,Literal('rdflib'))
+    project = db.value(None, doap.name, Literal('rdflib'))
     for p,o in db.predicate_objects(project):
-       print('%-30s = %s'%(db.qname(p),o))
+       print('%-30s = %s' % (db.qname(p), o))
 
 
 RDFAlchemy use of Sesame

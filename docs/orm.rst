@@ -34,7 +34,7 @@ The predicate must be passed in.
 
     class Company(rdfSubject):
         rdf_type = ov.Company
-        symbol = rdfSingle(ov.symbol,'symbol')  #second param is optional
+        symbol = rdfSingle(ov.symbol, 'symbol')  #second param is optional
         cik = rdfSingle(ov.secCik)
         companyName = rdfSingle(ov.companyName)
         address = rdfSingle(vcard.adr)
@@ -140,4 +140,3 @@ rest pull from the relational database via SQLAlchemy.  A developer need not
 put all of his data in one repository.  
 
 You can mix and match SQL, RDF and SPARQL data with little effort.
-
