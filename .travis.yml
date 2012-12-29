@@ -1,12 +1,26 @@
+# http://travis-ci.org/#!/gjhiggins/RDFAlchemy
 language: python
 python:
-  - "2.5"
-  - "2.6"
-  - "2.7"
-  - "3.2"
-# command to install dependencies
+    - 2.5
+    - 2.6
+    - 2.7
+    - 3.2
+matrix:
+    include:
+        - python: 2.5
+          env: FULL="true"
+        - python: 2.6
+          env: FULL="true"
+        - python: 2.7
+          env: FULL="true"
+        - python: 3.2
+          env: LANG="C"
 install:
-  - "pip install . --use-mirrors"
-  - "pip install -r requirements.txt --use-mirrors"
-# command to run tests
-script: nosetests
+    - if [[ $TRAVIS_PYTHON_VERSION == '2.5' ]]; then pip install --use-mirrors simplejson; fi
+    - pip install -r requirements.txt --use-mirrors
+    - python setup.py install
+script:
+    # Must cd somewhere else so python3 doesn't get confused and run
+    # the python2 code from the current directory instead of the installed
+    # 2to3 version.
+    - nosetests
