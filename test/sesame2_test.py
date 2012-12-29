@@ -1,6 +1,7 @@
 from rdfalchemy.sparql.sesame2 import SesameGraph
+import os
 
-url = 'http://localhost:8080/bigdata/sparql'
+url = os.environ.get('SESAME2_URL', 'http://example.com/sparql')
 
 if 'example.com' in url:
     from nose import SkipTest
