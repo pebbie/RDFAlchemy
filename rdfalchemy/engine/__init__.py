@@ -48,6 +48,12 @@ def create_engine(url='', identifier="", create=False):
         db = ConjunctiveGraph('Sleepycat', identifier=identifier)
         openstr = os.path.abspath(os.path.expanduser(url[12:]))
         db.open(openstr, create=create)
+        
+    elif url.lower().startswith('sqlalchemy:'):
+        from rdflib import ConjunctiveGraph
+        db = ConjunctiveGraph('SQLAlchemy',identifier=identifier)
+        openstr = url[11:]
+        db.open(openstr,create=create)
 
     elif url.lower().startswith('sqlite://'):
         from rdflib import ConjunctiveGraph

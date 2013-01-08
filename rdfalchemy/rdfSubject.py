@@ -71,7 +71,8 @@ class rdfSubject(object):
                 self.resUri = URIRef(resUri[1:-1])
             elif resUri.startswith("_:"):
                 self.resUri = BNode(resUri[2:])
-
+            if self.rdf_type:
+                self.db.add((self.resUri,RDF.type,self.rdf_type))
         else:
             raise AttributeError("cannot construct rdfSubject from %s" % (
                                         str(resUri)))
